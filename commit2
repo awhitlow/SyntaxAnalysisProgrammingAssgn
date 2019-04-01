@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+/*Global variable declarations*/
+int charClass;
+char lexeme [100];
+char nextChar;
+int lexLen;
+int token;
+int nextToken
+FILE *in_fp, *fopen();
+
+/*Function declaration*/
+void addchar();
+void getchar();
+void getNonBlank();
+int lex();
+
+/*Token codes*/
+#define INT_LIT 10
+#define IDENT 11
+#define ADD_OP 20
+#define SUB_OP 22
+#define DIV_OP 24
+#define MULT_OP 23
