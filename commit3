@@ -16,6 +16,20 @@ void addchar();
 void getchar();
 void getNonBlank();
 int lex();
+int lookup(char);
+
+/*Functions for lexical analyzer*/
+void expr();
+void term();
+void factor();
+
+/*Function to provide error message*/
+void error();
+
+/*Character classes */
+#define LETTER 0
+#define DIGIT 1
+#define UNKNOWN 99
 
 /*Token codes*/
 #define INT_LIT 10
