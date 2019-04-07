@@ -126,3 +126,21 @@ int lex(){
         //Get the next character from the file 
         getChar();
         break;
+    
+    //If the character is EOF
+    case EOF:
+        //The next token will also equal EOF 
+        nextToken = EOF;
+        //Lexeme 0 is set to E
+        lexeme[0] = 'E';
+        //Lexeme 1 is set to O
+        lexeme[1] = 'O';
+        //Lexeme 2 is set to F
+        lexeme[2] = 'F';
+        //Lexeme 3 is set to 0
+        lexeme[3] = 0;
+        break;
+    }
+    printf("Next token is: %d, Next lexeme is %s\n", nextToken, lexeme);
+    return nextToken;
+}
