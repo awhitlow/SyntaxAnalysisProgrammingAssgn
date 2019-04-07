@@ -144,3 +144,14 @@ int lex(){
     printf("Next token is: %d, Next lexeme is %s\n", nextToken, lexeme);
     return nextToken;
 }
+
+//Function to look up the token that pairs with a particular character
+int lookup(char ch){
+    switch (ch){
+    //If the character is a left parenthesis
+    case '(':
+        //Add the character to the lexeme
+        addChar();
+        //Set the next token equal to  LEFT_PAREN 
+        nextToken = LEFT_PAREN;
+        break;
