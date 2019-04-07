@@ -92,3 +92,11 @@ int lex(){
         addChar();
         //Get the next character
         getChar();
+        //While the character class is either LETTER or DIGIT, add the character to the lexeme and get the next character
+        while (charClass == LETTER || charClass == DIGIT){
+            addChar();
+            getChar();
+        }
+    //The nextToken is set to be an identifier
+    nextToken = IDENT;
+    break;
