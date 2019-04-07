@@ -155,3 +155,19 @@ int lookup(char ch){
         //Set the next token equal to  LEFT_PAREN 
         nextToken = LEFT_PAREN;
         break;
+         
+    //If the character is a right parenthesis
+    case ')':
+        //Add the character to the lexeme
+        addChar();
+        //Set the next token equal to RIGHT_PAREN
+        nextToken = RIGHT_PAREN;
+        break;
+        
+    //If the character is an addition symbol
+    case '+':
+        //Add the character to the lexeme
+        addChar();
+        //Set the token equal to ADD_OP
+        nextToken = ADD_OP;
+        break;
