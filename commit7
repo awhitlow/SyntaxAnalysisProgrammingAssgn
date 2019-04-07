@@ -60,6 +60,7 @@ int main()
     }
 }
 
+//Function to get character and decide which character class it belongs to 
 void getChar(){
     //If the next character in the input is not the end of the file
     if((nextChar = getc(in_fp)) != EOF){
@@ -76,3 +77,18 @@ void getChar(){
         else
             charClass = EOF;
 }
+
+//Function that acts as a lexical analyzer
+int lex(){
+    //lexeme length is set to 0 
+    lexLen = 0;
+    //Function to skip over blank characters is called 
+    getNonBlank();
+    //switch statement to parse the different character types
+    switch(charClass){
+    //if the character is of type LETTER
+    case LETTER:
+        //Add the next character to the lexeme
+        addChar();
+        //Get the next character
+        getChar();
