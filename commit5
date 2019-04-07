@@ -11,9 +11,9 @@ int token;
 int nextToken
 FILE *in_fp, *fopen();
 
-/*Function declaration*/
-void addchar();
-void getchar();
+/*Function declarations*/
+void addChar();
+void getChar();
 void getNonBlank();
 int lex();
 int lookup(char);
@@ -41,3 +41,21 @@ void error();
 #define ASSIGN_OP 20
 #define LEFT_PAREN 25
 #define RIGHT_PAREN 26
+
+int main()
+{
+    //Open file
+    if((in_fp = fopen("front.in", "r")) == NULL)
+        printf("ERROR - cannot open file \n");
+    //Get the first character from the file
+    else{
+        getChar();
+        //Do this until the end of the file is reached:
+        do {
+          //call the lex function to determine what to do with the specific character type
+            lex();
+          //call the expr() function to determine the parsing for the lexeme
+            expr();
+        } while(nextToken != EOF);
+    }
+}
