@@ -118,3 +118,11 @@ int lex(){
         //The next token is set to be an integer literal 
         nextToken = INT_LIT;
         break;
+        
+    //If the character type is unknown    
+    case UNKNOWN:
+        //Call function to lookup function to determine which type of character the unknown char is
+        lookup(nextChar);
+        //Get the next character from the file 
+        getChar();
+        break;
