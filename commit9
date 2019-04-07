@@ -85,6 +85,7 @@ int lex(){
     //Function to skip over blank characters is called 
     getNonBlank();
     //switch statement to parse the different character types
+    
     switch(charClass){
     //if the character is of type LETTER
     case LETTER:
@@ -97,6 +98,23 @@ int lex(){
             addChar();
             getChar();
         }
-    //The nextToken is set to be an identifier
+    //The next token is set to be an identifier
     nextToken = IDENT;
     break;
+    
+    //If the character is of type DIGIT
+    case DIGIT:
+        //Add the next character to the lexeme
+        addChar();
+        //Get the next character from the file
+        getChar();
+        //While the character class is of type DIGIT
+        while (charClass == DIGIT){
+            //Add the next character to the lexeme
+            addChar();
+            //Get the next character from the file
+            getChar();
+        }
+        //The next token is set to be an integer literal 
+        nextToken = INT_LIT;
+        break;
