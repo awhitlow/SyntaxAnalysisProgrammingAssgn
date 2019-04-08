@@ -249,3 +249,18 @@ void factor(){
             //call the lex and expr functions
             lex();
             expr();
+            //If the following token is a right parenthesis
+            if (nextToken == RIGHT_PAREN)
+                //Call the lex function
+                lex();
+            //Else display an error message calling the error function
+            else
+                error();
+        }
+        //If the character is neither an identifier or integer literal, display error message 
+        else
+            error();
+    }
+    //Display message when exiting factor function
+    printf("Exit <factor>\n");
+}
