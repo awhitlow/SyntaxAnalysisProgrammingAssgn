@@ -211,9 +211,9 @@ int lookup(char ch){
 void expr(){
     //Display this line 
     printf("Enter <expr>\n");
-    //Call the term function (tbd)
+    //Call the term function
     term();
-    //While the next token is either an add or subtract operation
+    //While the next token is either an add or subtract operator
     //call the lex and term functions 
     while(nextToken == ADD_OP || nextToken == SUB_OP){
         lex();
@@ -224,11 +224,28 @@ void expr(){
 }
 
 void term(){
+    //Display this line 
     printf("Enter <term>\n");
+    //Call the factor function (tbd)
     factor();
+    //While the next token is either a multiplication or division operator
+    //call the lex and factor functions 
     while(nextToken == MULT_OP || nextToken == DIV_OP){
         lex();
         factor();
     }
     printf("Exit <term>\n");
 }
+
+void factor(){
+    //Display this line 
+    printf("Enter <factor>\n");
+    //If the next token is an identifier or integer literal, call the lex function
+    if (nextToken == IDENT || nextToken == INT_LIT)
+        lex();
+    //If the next token is a left parenthesis
+    else{
+        if (nextToken == LEFT_PAREN){
+            //call the lex and expr functions
+            lex();
+            expr();
