@@ -222,3 +222,13 @@ void expr(){
     //Print an exit message once no longer within the "expr" non-terminal
     printf("Exit <expr>\n");
 }
+
+void term(){
+    printf("Enter <term>\n");
+    factor();
+    while(nextToken == MULT_OP || nextToken == DIV_OP){
+        lex();
+        factor();
+    }
+    printf("Exit <term>\n");
+}
