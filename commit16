@@ -206,3 +206,19 @@ int lookup(char ch){
     }
     return nextToken;
 }
+
+//Function to parse expressions 
+void expr(){
+    //Display this line 
+    printf("Enter <expr>\n");
+    //Call the term function (tbd)
+    term();
+    //While the next token is either an add or subtract operation
+    //call the lex and term functions 
+    while(nextToken == ADD_OP || nextToken == SUB_OP){
+        lex();
+        term();
+    }
+    //Print an exit message once no longer within the "expr" non-terminal
+    printf("Exit <expr>\n");
+}
