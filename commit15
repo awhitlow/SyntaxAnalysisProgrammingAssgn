@@ -187,3 +187,22 @@ int lookup(char ch){
         //Set the token equal to to MULT_OP
         nextToken = MULT_OP;
         break;
+        
+     //If the character is a division opertor   
+     case '/':
+        //Add the character to the lexeme
+        addChar();
+        //Set the token equal to to DIV_OP
+        nextToken = DIV_OP;
+        break;
+        
+    //If the character is the EOF 
+    default:
+        //Add the character to the lexeme
+        addChar();
+        //Set the next token equal to EOF
+        nextToken = EOF;
+        break;
+    }
+    return nextToken;
+}
