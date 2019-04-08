@@ -171,3 +171,19 @@ int lookup(char ch){
         //Set the token equal to ADD_OP
         nextToken = ADD_OP;
         break;
+    
+    //If the character is a subtraction operator
+    case '-':
+        //Add the character to the lexeme
+        addChar();
+        //Set the token equal to SUB_OP
+        nextToken = SUB_OP;
+        break;
+    
+    //If the character is a multiplication opertor
+    case '*':
+        //Add the character to the lexeme
+        addChar();
+        //Set the token equal to to MULT_OP
+        nextToken = MULT_OP;
+        break;
