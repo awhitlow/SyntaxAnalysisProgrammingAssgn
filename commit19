@@ -264,3 +264,17 @@ void factor(){
     //Display message when exiting factor function
     printf("Exit <factor>\n");
 }
+
+void error(){
+    printf("Error - Character Unrecognizable\n");
+    if((nextChar = getc(in_fp)) != EOF){
+        //go to next character
+        getChar(line);
+        lex();
+    }
+    else{
+        nextChar = EOF;
+        lex();
+    }
+
+}
