@@ -9,7 +9,7 @@ char nextChar;
 int lexLen;
 int token;
 int nextToken
-FILE *in_fp, *fopen();
+FILE *in_fp, *fptr, *fopen();
 
 /*Function declarations*/
 void addChar();
@@ -17,6 +17,7 @@ void getChar();
 void getNonBlank();
 int lex();
 int lookup(char);
+void getLine();
 
 /*Functions for lexical analyzer*/
 void expr();
@@ -45,11 +46,11 @@ void error();
 int main()
 {
     //Open file
-    if((in_fp = fopen("front.in", "r")) == NULL)
+    if((fptr = fopen("front.in", "r")) == NULL)
         printf("ERROR - cannot open file \n");
     //Get the first character from the file
     else{
-        getChar();
+        getLine();
         //Do this until the end of the file is reached:
         do {
           //call the lex function to determine what to do with the specific character type
@@ -60,10 +61,17 @@ int main()
     }
 }
 
+void getLine(){
+    if(fgets (line, 60, fptr)!=NULL ) {
+      getChar(line);
+   }
+   fclose(fptr);
+}
+
 //Function to get character and decide which character class it belongs to 
-void getChar(){
+void getChar(char line[]){
     //If the next character in the input is not the end of the file
-    if((nextChar = getc(in_fp)) != EOF){
+    if((nextChar = getc(fptr)) != EOF){
         //If the character is of type alpha, the character class is set to LETTER
         if(isalpha(nextChar))
             charClass = LETTER;
@@ -92,11 +100,11 @@ int lex(){
         //Add the next character to the lexeme
         addChar();
         //Get the next character
-        getChar();
+        getChar(line);
         //While the character class is either LETTER or DIGIT, add the character to the lexeme and get the next character
         while (charClass == LETTER || charClass == DIGIT){
             addChar();
-            getChar();
+            getChar(line);
         }
     //The next token is set to be an identifier
     nextToken = IDENT;
@@ -107,13 +115,13 @@ int lex(){
         //Add the next character to the lexeme
         addChar();
         //Get the next character from the file
-        getChar();
+        getChar(line);
         //While the character class is of type DIGIT
         while (charClass == DIGIT){
             //Add the next character to the lexeme
             addChar();
             //Get the next character from the file
-            getChar();
+            getChar(line);
         }
         //The next token is set to be an integer literal 
         nextToken = INT_LIT;
@@ -124,7 +132,7 @@ int lex(){
         //Call function to lookup function to determine which type of character the unknown char is
         lookup(nextChar);
         //Get the next character from the file 
-        getChar();
+        getChar(line);
         break;
     
     //If the character is EOF
