@@ -1,17 +1,23 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 
 /*Global variable declarations*/
 int charClass;
+char line[60];
 char lexeme [100];
+//char *line = NULL;
+//size_t len = 0;
+//ssize_t read;
 char nextChar;
 int lexLen;
 int token;
-int nextToken
-FILE *in_fp, *fptr, *fopen();
+int nextToken;
 
-/*Function declarations*/
+FILE *in_fp, * fptr, *fopen();
+
+/*Function declaration*/
 void addChar();
 void getChar();
 void getNonBlank();
@@ -45,21 +51,29 @@ void error();
 
 int main()
 {
-    //Open file
-    if((fptr = fopen("front.in", "r")) == NULL)
+    //open file
+    if((fptr = fopen("front.in" , "r")) == NULL)
         printf("ERROR - cannot open file \n");
-    //Get the first character from the file
+    //
     else{
         getLine();
-        //Do this until the end of the file is reached:
         do {
-          //call the lex function to determine what to do with the specific character type
             lex();
-          //call the expr() function to determine the parsing for the lexeme
             expr();
         } while(nextToken != EOF);
     }
 }
+
+/*void getLine(){
+    while ((read = getline(&line, &len, fptr)) != -1){
+        getChar(&line);
+    }
+    fclose(fptr);
+    if(line)
+        free(line);
+    exit(EXIT_SUCCESS);
+}
+*/
 
 void getLine(){
     if(fgets (line, 60, fptr)!=NULL ) {
@@ -67,85 +81,66 @@ void getLine(){
    }
    fclose(fptr);
 }
-
-//Function to get character and decide which character class it belongs to 
-void getChar(char line[]){
-    //If the next character in the input is not the end of the file
-    if((nextChar = getc(fptr)) != EOF){
-        //If the character is of type alpha, the character class is set to LETTER
-        if(isalpha(nextChar))
-            charClass = LETTER;
-        //If the character is of type digit, the character class is set to DIGIT
-        else if (isdigit(nextChar))
-            charClass = DIGIT;
-            //If the character is neither alpha or numeric, its type is unknown 
-            else charClass = UNKNOWN;
-        }
-        //If the character is the end of file, it is set to EOF
-        else
-            charClass = EOF;
+void getNonBlank(){
+    while (isspace(nextChar))
+        getChar();
 }
 
-//Function that acts as a lexical analyzer
+void getChar(char line[]){
+    if((nextChar = getc(fptr)) != EOF){
+        if(isalpha(nextChar))
+            charClass = LETTER;
+        else if (isdigit(nextChar))
+            charClass = DIGIT;
+        else charClass = UNKNOWN;
+    }
+    else
+        charClass = EOF;
+}
+
+void addChar(){
+    if (lexLen <= 98){
+        lexeme[lexLen++] = nextChar;
+        lexeme[lexLen] = 0;
+    }
+    else
+        printf("Error - lexeme is too long \n");
+}
+
 int lex(){
-    //lexeme length is set to 0 
     lexLen = 0;
-    //Function to skip over blank characters is called 
     getNonBlank();
-    //switch statement to parse the different character types
-    
     switch(charClass){
-    //if the character is of type LETTER
     case LETTER:
-        //Add the next character to the lexeme
         addChar();
-        //Get the next character
         getChar(line);
-        //While the character class is either LETTER or DIGIT, add the character to the lexeme and get the next character
         while (charClass == LETTER || charClass == DIGIT){
             addChar();
             getChar(line);
         }
-    //The next token is set to be an identifier
     nextToken = IDENT;
     break;
-    
-    //If the character is of type DIGIT
+
     case DIGIT:
-        //Add the next character to the lexeme
         addChar();
-        //Get the next character from the file
         getChar(line);
-        //While the character class is of type DIGIT
         while (charClass == DIGIT){
-            //Add the next character to the lexeme
             addChar();
-            //Get the next character from the file
             getChar(line);
         }
-        //The next token is set to be an integer literal 
         nextToken = INT_LIT;
         break;
-        
-    //If the character type is unknown    
+
     case UNKNOWN:
-        //Call function to lookup function to determine which type of character the unknown char is
         lookup(nextChar);
-        //Get the next character from the file 
         getChar(line);
         break;
-    
-    //If the character is EOF
+
     case EOF:
-        //The next token will also equal EOF 
         nextToken = EOF;
-        //Lexeme 0 is set to E
         lexeme[0] = 'E';
-        //Lexeme 1 is set to O
         lexeme[1] = 'O';
-        //Lexeme 2 is set to F
         lexeme[2] = 'F';
-        //Lexeme 3 is set to 0
         lexeme[3] = 0;
         break;
     }
@@ -153,91 +148,59 @@ int lex(){
     return nextToken;
 }
 
-//Function to look up the token that pairs with a particular character
 int lookup(char ch){
     switch (ch){
-    //If the character is a left parenthesis
     case '(':
-        //Add the character to the lexeme
         addChar();
-        //Set the next token equal to  LEFT_PAREN 
         nextToken = LEFT_PAREN;
         break;
-         
-    //If the character is a right parenthesis
+
     case ')':
-        //Add the character to the lexeme
         addChar();
-        //Set the next token equal to RIGHT_PAREN
         nextToken = RIGHT_PAREN;
         break;
-        
-    //If the character is an addition symbol
+
     case '+':
-        //Add the character to the lexeme
         addChar();
-        //Set the token equal to ADD_OP
         nextToken = ADD_OP;
         break;
-    
-    //If the character is a subtraction operator
+
     case '-':
-        //Add the character to the lexeme
         addChar();
-        //Set the token equal to SUB_OP
         nextToken = SUB_OP;
         break;
-    
-    //If the character is a multiplication opertor
+
     case '*':
-        //Add the character to the lexeme
         addChar();
-        //Set the token equal to to MULT_OP
         nextToken = MULT_OP;
         break;
-        
-     //If the character is a division opertor   
-     case '/':
-        //Add the character to the lexeme
+
+    case '/':
         addChar();
-        //Set the token equal to to DIV_OP
         nextToken = DIV_OP;
         break;
-        
-    //If the character is the EOF 
+
     default:
-        //Add the character to the lexeme
         addChar();
-        //Set the next token equal to EOF
         nextToken = EOF;
         break;
     }
     return nextToken;
 }
 
-//Function to parse expressions 
 void expr(){
-    //Display this line 
     printf("Enter <expr>\n");
-    //Call the term function
     term();
-    //While the next token is either an add or subtract operator
-    //call the lex and term functions 
     while(nextToken == ADD_OP || nextToken == SUB_OP){
         lex();
         term();
     }
-    //Print an exit message once no longer within the "expr" non-terminal
     printf("Exit <expr>\n");
 }
 
 void term(){
-    //Display this line 
     printf("Enter <term>\n");
-    //Call the factor function (tbd)
     factor();
-    //While the next token is either a multiplication or division operator
-    //call the lex and factor functions 
     while(nextToken == MULT_OP || nextToken == DIV_OP){
         lex();
         factor();
@@ -246,30 +209,21 @@ void term(){
 }
 
 void factor(){
-    //Display this line 
     printf("Enter <factor>\n");
-    //If the next token is an identifier or integer literal, call the lex function
     if (nextToken == IDENT || nextToken == INT_LIT)
         lex();
-    //If the next token is a left parenthesis
     else{
         if (nextToken == LEFT_PAREN){
-            //call the lex and expr functions
             lex();
             expr();
-            //If the following token is a right parenthesis
             if (nextToken == RIGHT_PAREN)
-                //Call the lex function
                 lex();
-            //Else display an error message calling the error function
             else
                 error();
         }
-        //If the character is neither an identifier or integer literal, display error message 
         else
             error();
     }
-    //Display message when exiting factor function
     printf("Exit <factor>\n");
 }
 
@@ -286,3 +240,4 @@ void error(){
     }
 
 }
+
